@@ -124,6 +124,18 @@ class Wall (Widget):
         Color(0,0,0)
         Rectangle(pos = (self.column * self.block_size,self.row * self.block_size))
 
+class Target (Widget):
+    def __init__(self, column , row ,world_block, **kwargs):
+        super().__init__(**kwargs)
+        self.column = column
+        self.row = row
+        self.world_block = world_block
+
+    def draw(self):
+        Color(1,0,0)
+        self.tar = Rectangle(pos=[(self.world_block*0.25)+(self.world_block*self.column),(self.world_block*0.25) +(self.world_block*self.row)],size=[self.world_block*0.5,self.world_block*0.5])
+
+
 class RobotWorld(Widget):
 
     def __init__(self, **kwargs):
@@ -131,8 +143,14 @@ class RobotWorld(Widget):
         self.block_size = 100
         self.robot = Robot(self.block_size)
         self.wall = []
+        self.target = Target(random.randint(0,int((width/self.block_size)-1)),random.randint(0,int((height/self.block_size)-1)),self.block_size)
+
         for i in range (20):
             self.wall.append(Wall(random.randint(0,int((width/self.block_size)-1)),random.randint(0,int((height/self.block_size)-1)),self.block_size))
+        for j in range (len(self.wall)):
+            if (self.wall[j].row == self.target.row and self.wall[j].column == self.target.column) or (self.wall[j].column == self.robot.column and self.wall[j].row == self.robot.row):
+                self.wall[j] = Wall(random.randint(0,int((width/self.block_size)-1)),random.randint(0,int((height/self.block_size)-1)),self.block_size)
+        
         with self.canvas:
             for i in range (int((height/self.block_size))):
                 for k in range (int((width/self.block_size))):
@@ -142,6 +160,7 @@ class RobotWorld(Widget):
                 self.wall[j].draw()
 
             self.robot.draw()
+            self.target.draw()
 
 game = RobotWorld() # global variable
 
