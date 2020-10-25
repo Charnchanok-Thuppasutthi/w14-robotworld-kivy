@@ -76,19 +76,42 @@ class Robot(Widget):
                 break
 
     def move(self):
-          
-        if self.direction == 'w':
-            if (self.row*self.block_size)+self.block_size < height :
-                self.row += 1
-        elif self.direction == 'd':
-            if (self.column*self.block_size)+self.block_size < width:
-                self.column += 1
-        if self.direction == 's':
-            if self.row > 0 :
-                self.row -= 1
-        if self.direction == 'a':
-            if self.column > 0  :
-                self.column -= 1
+        if self.is_blocked() == False:
+
+            if self.direction == 'w':
+                if (self.row*self.block_size)+self.block_size < height :
+                    self.row += 1
+            elif self.direction == 'd':
+                if (self.column*self.block_size)+self.block_size < width:
+                    self.column += 1
+            if self.direction == 's':
+                if self.row > 0 :
+                    self.row -= 1
+            if self.direction == 'a':
+                if self.column > 0  :
+                    self.column -= 1
+
+    def is_blocked(self):
+
+        check = False
+
+        for i in game.wall:
+            if self.direction == 'w':
+                if (i.row == self.row+1) and (i.column == self.column):
+                    check = True
+                
+            elif self.direction == 'd':
+                if (i.row == self.row) and (i.column == self.column+1):
+                    check = True
+                 
+            elif self.direction == 's':
+                if (i.row == self.row-1) and (i.column == self.column):
+                    check = True
+                
+            elif self.direction == 'a':
+                if (i.row == self.row) and (i.column == self.column-1):
+                    check = True
+        return check
 
 class Wall (Widget):
     def __init__(self, column , row ,block_size ,**kwargs):
@@ -117,7 +140,7 @@ class RobotWorld(Widget):
 
             for j in range (len(self.wall)):
                 self.wall[j].draw()
-                
+
             self.robot.draw()
 
 game = RobotWorld() # global variable
