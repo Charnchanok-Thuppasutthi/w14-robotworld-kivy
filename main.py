@@ -90,6 +90,19 @@ class Robot(Widget):
             if self.direction == 'a':
                 if self.column > 0  :
                     self.column -= 1
+        if game.target.column == self.column and game.target.row == self.row:
+            game.target.column = random.randint(0,int((width/game.block_size)-1))
+            game.target.row = random.randint(0,int((height/game.block_size)-1))
+            
+            for i in game.wall:
+                if i.column == game.target.column and i.row == game.target.row:
+                    game.target.column = random.randint(0,int((width/game.block_size)-1))
+                    game.target.row = random.randint(0,int((height/game.block_size)-1))
+            for i in game.wall:
+                if i.column == game.target.column and i.row == game.target.row:
+                    game.target.column = random.randint(0,int((width/game.block_size)-1))
+                    game.target.row = random.randint(0,int((height/game.block_size)-1))
+        game.target.tar.pos = [(game.target.world_block*0.25)+(game.target.world_block*game.target.column),(game.target.world_block*0.25)+(game.target.world_block*game.target.row)]
 
     def is_blocked(self):
 
