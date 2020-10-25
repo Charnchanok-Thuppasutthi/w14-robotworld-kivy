@@ -90,18 +90,34 @@ class Robot(Widget):
             if self.column > 0  :
                 self.column -= 1
 
+class Wall (Widget):
+    def __init__(self, column , row ,block_size ,**kwargs):
+        super().__init__(**kwargs)
+        self.block_size = block_size
+        self.column = column
+        self.row = row
+
+    def draw(self):
+        Color(0,0,0)
+        Rectangle(pos = (self.column * self.block_size,self.row * self.block_size))
+
 class RobotWorld(Widget):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.block_size = 100
         self.robot = Robot(self.block_size)
-
+        self.wall = []
+        for i in range (20):
+            self.wall.append(Wall(random.randint(0,int((width/self.block_size)-1)),random.randint(0,int((height/self.block_size)-1)),self.block_size))
         with self.canvas:
             for i in range (int((height/self.block_size))):
                 for k in range (int((width/self.block_size))):
                     Rectangle(pos=((self.block_size*k),(self.block_size*i)))
 
+            for j in range (len(self.wall)):
+                self.wall[j].draw()
+                
             self.robot.draw()
 
 game = RobotWorld() # global variable
